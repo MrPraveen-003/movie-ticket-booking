@@ -1,4 +1,4 @@
-# CinePass Movie Ticket Booking App
+#  Movie Ticket Booking App(Cinepass)
 
 CinePass is a full-stack movie ticket booking experience for browsing movies, selecting seats, completing checkout, and managing bookings from both customer and admin perspectives. The application combines a React-based front end with an Express server and a JSON/MongoDB-backed data layer while preserving the existing user experience.
 
@@ -61,11 +61,4 @@ Run the production build:
 npm start
 ```
 
-## Authentication Notes
 
-Seeded demo accounts are available in the local data store:
-
-- Admin: admin@cinepass.com / admin123
-- Customer: user@cinepass.com / user123
-
-If you connect MongoDB, the app will use that data source instead of the local fallback.

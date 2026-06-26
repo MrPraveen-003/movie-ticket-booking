@@ -1,13 +1,13 @@
 import { createContext, useContext, useEffect, useState, type PropsWithChildren } from 'react';
 import axios from 'axios';
-import type { User } from '../types';
+import type { User, UserRole } from '../types';
 
 interface AuthContextType {
   user: User | null;
   token: string | null;
   loading: boolean;
-  login: (email: string, password: string) => Promise<void>;
-  register: (name: string, email: string, password: string) => Promise<void>;
+  login: (email: string, password: string, requestedRole?: UserRole) => Promise<User>;
+  register: (name: string, email: string, password: string) => Promise<User>;
   logout: () => void;
   refreshUser: () => Promise<void>;
 }
@@ -53,16 +53,18 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
     void refreshUser();
   }, [token]);
 
-  const login = async (email: string, password: string) => {
-    const response = await axios.post('/api/auth/login', { email, password });
+  const login = async (email: string, password: string, requestedRole: UserRole = 'user'): Promise<User> => {
+    const response = await axios.post('/api/auth/login', { email, password, role: requestedRole });
     setToken(response.data.token);
     setUser(response.data.user);
+    return response.data.user as User;
   };
 
-  const register = async (name: string, email: string, password: string) => {
+  const register = async (name: string, email: string, password: string): Promise<User> => {
     const response = await axios.post('/api/auth/register', { name, email, password });
     setToken(response.data.token);
     setUser(response.data.user);
+    return response.data.user as User;
   };
 
   const logout = () => {

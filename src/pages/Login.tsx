@@ -16,6 +16,7 @@ export const Login: React.FC = () => {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [selectedRole, setSelectedRole] = useState<'user' | 'admin'>('user');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -29,9 +30,11 @@ export const Login: React.FC = () => {
     try {
       setLoading(true);
       setError('');
-      await login(email, password);
+      const loggedUser = await login(email, password, selectedRole);
+      await new Promise((resolve) => setTimeout(resolve, 0));
       showToast('🌟 Welcome back! You have logged in successfully.', 'success');
-      navigate(redirect);
+      const nextPath = redirect && redirect !== '/' ? redirect : loggedUser.role === 'admin' ? '/admin' : '/';
+      navigate(nextPath, { replace: true });
     } catch (err: any) {
       const msg = err.response?.data?.message || 'Authentication failed. Please verify credentials.';
       setError(msg);
@@ -42,19 +45,12 @@ export const Login: React.FC = () => {
   };
 
   // Quick seed logins helper helper
-  const handleQuickLogin = async (usrEmail: string, pass: string) => {
-    try {
-      setLoading(true);
-      setError('');
-      await login(usrEmail, pass);
-      showToast(`⚡ Quick login successful: Connected as ${usrEmail === 'admin@moviebook.com' ? 'Administrator' : 'Customer'}!`, 'success');
-      navigate(redirect);
-    } catch (err: any) {
-      setError('Quick login failed, please register or retype.');
-      showToast('Failed to connect via demo credentials.', 'error');
-    } finally {
-      setLoading(false);
-    }
+  const handleQuickLogin = (usrEmail: string, pass: string, role: 'user' | 'admin') => {
+    setEmail(usrEmail);
+    setPassword(pass);
+    setSelectedRole(role);
+    setError('');
+    showToast('🧪 Demo credentials filled in. Press the sign-in button to continue.', 'info');
   };
 
   return (
@@ -115,6 +111,23 @@ export const Login: React.FC = () => {
               </div>
             </div>
 
+            <div className="grid grid-cols-2 gap-2">
+              <button
+                type="button"
+                onClick={() => setSelectedRole('user')}
+                className={`rounded-xl border px-3 py-2 text-xs font-semibold transition-all ${selectedRole === 'user' ? 'border-amber-500 bg-amber-500/10 text-amber-400' : 'border-slate-800 bg-slate-950 text-slate-400 hover:border-slate-700'}`}
+              >
+                User Access
+              </button>
+              <button
+                type="button"
+                onClick={() => setSelectedRole('admin')}
+                className={`rounded-xl border px-3 py-2 text-xs font-semibold transition-all ${selectedRole === 'admin' ? 'border-indigo-500 bg-indigo-500/10 text-indigo-400' : 'border-slate-800 bg-slate-950 text-slate-400 hover:border-slate-700'}`}
+              >
+                Admin Access
+              </button>
+            </div>
+
             <button
               type="submit"
               disabled={loading}
@@ -140,7 +153,7 @@ export const Login: React.FC = () => {
             </span>
             <div className="grid grid-cols-2 gap-2 text-center text-xs">
               <button
-                onClick={() => handleQuickLogin('user@moviebook.com', 'user123')}
+                onClick={() => handleQuickLogin('user@moviebook.com', 'user123', 'user')}
                 disabled={loading}
                 className="p-2 py-2.5 rounded-lg border border-slate-800 bg-slate-900 text-slate-300 font-semibold hover:border-amber-505/30 transition-all cursor-pointer"
                 id="quick-user-login-btn"
@@ -148,7 +161,7 @@ export const Login: React.FC = () => {
                 Standard Customer <span className="text-amber-500 text-[10px] block mt-0.5">user123</span>
               </button>
               <button
-                onClick={() => handleQuickLogin('admin@moviebook.com', 'admin123')}
+                onClick={() => handleQuickLogin('admin@moviebook.com', 'admin123', 'admin')}
                 disabled={loading}
                 className="p-2 py-2.5 rounded-lg border border-indigo-900 bg-slate-900 text-slate-300 font-semibold hover:border-indigo-505/30 transition-all cursor-pointer"
                 id="quick-admin-login-btn"

@@ -20,7 +20,7 @@ type RouteGuardProps = {
 const RouteGuard: React.FC<RouteGuardProps> = ({ children, requireAdmin = false }) => {
   const { user, loading } = useAuth();
 
-  if (loading) {
+  if (loading && !user) {
     return (
       <div className="flex min-h-[60vh] flex-col items-center justify-center gap-3">
         <div className="h-10 w-10 animate-spin rounded-full border-4 border-amber-500/30 border-t-amber-500" />
