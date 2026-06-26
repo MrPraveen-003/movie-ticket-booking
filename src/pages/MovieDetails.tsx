@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Movie, Show, Theatre } from '../types';
-import { Star, Clock, Calendar, Globe, MapPin, Film, ChevronRight } from 'lucide-react';
+import { Star, Clock, Calendar, Globe, MapPin, Film } from 'lucide-react';
 import { motion } from 'motion/react';
+import { formatCurrency, formatDisplayDate, formatShowTime } from '../utils/formatters';
 
 export const MovieDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -72,13 +73,6 @@ export const MovieDetails: React.FC = () => {
   const showsOnSelectedDate = shows.filter((s) => s.date === selectedDate);
   const theatreIds = Array.from(new Set(showsOnSelectedDate.map((s) => s.theatreId)));
   const listOfTheatres = theatres.filter((t) => theatreIds.includes(t.id));
-
-  // Helper to format show date
-  const formatHeaderDate = (dateStr: string) => {
-    const d = new Date(dateStr);
-    const options: Intl.DateTimeFormatOptions = { weekday: 'short', day: 'numeric', month: 'short' };
-    return d.toLocaleDateString('en-US', options);
-  };
 
   return (
     <div className="min-h-screen bg-slate-950 pb-20">
@@ -179,9 +173,9 @@ export const MovieDetails: React.FC = () => {
                   }`}
                   id={`date-time-slot-${date}`}
                 >
-                  <span className="text-[10px] uppercase opacity-75">{new Date(date).toLocaleDateString('en-US', { month: 'short' })}</span>
+                  <span className="text-[10px] uppercase opacity-75">{new Date(date).toLocaleDateString('en-IN', { month: 'short' })}</span>
                   <span className="text-lg leading-tight my-0.5">{new Date(date).getDate()}</span>
-                  <span className="text-[10px] uppercase opacity-75">{new Date(date).toLocaleDateString('en-US', { weekday: 'short' })}</span>
+                  <span className="text-[10px] uppercase opacity-75">{new Date(date).toLocaleDateString('en-IN', { weekday: 'short' })}</span>
                 </button>
               ))}
             </div>
@@ -226,8 +220,8 @@ export const MovieDetails: React.FC = () => {
                           className="bg-slate-950 border border-slate-800/85 hover:border-amber-500/50 hover:bg-slate-900 px-4 py-2 rounded-xl text-center cursor-pointer transition-all flex flex-col justify-center min-w-[90px]"
                           id={`hour-${show.id}`}
                         >
-                          <span className="text-sm font-semibold text-amber-400 font-mono tracking-tight">{show.time}</span>
-                          <span className="text-[10px] text-slate-500 mt-0.5 font-sans">${show.price} Base</span>
+                                  <span className="text-sm font-semibold text-amber-400 font-mono tracking-tight">{formatShowTime(show.time)}</span>
+                          <span className="text-[10px] text-slate-500 mt-0.5 font-sans">{formatCurrency(show.price)} Base</span>
                         </motion.button>
                       ))}
                     </div>

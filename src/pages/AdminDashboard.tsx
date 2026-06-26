@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Movie, Theatre, Show, Booking } from '../types';
 import { useAuth } from '../context/AuthContext';
 import { LayoutDashboard, Film, MapPin, DollarSign, Users, Ticket, Trash2, Plus, Calendar, Clock, Sparkles } from 'lucide-react';
+import { formatCurrency } from '../utils/formatters';
 
 export const AdminDashboard: React.FC = () => {
   const { user } = useAuth();
@@ -203,7 +204,7 @@ export const AdminDashboard: React.FC = () => {
               </div>
               <div className="flex flex-col">
                 <span className="text-[10px] text-slate-500 uppercase tracking-wider font-semibold">Total Revenue</span>
-                <span className="text-2xl font-bold text-white font-mono mt-0.5">${totalEarningsInvoiced}</span>
+                <span className="text-2xl font-bold text-white font-mono mt-0.5">{formatCurrency(totalEarningsInvoiced)}</span>
                 <span className="text-[10px] text-slate-450 mt-0.5">Direct ticket checkouts</span>
               </div>
             </div>
@@ -239,7 +240,7 @@ export const AdminDashboard: React.FC = () => {
               </div>
               <div className="flex flex-col">
                 <span className="text-[10px] text-slate-505 uppercase tracking-wider font-semibold">Average order ticket value</span>
-                <span className="text-2xl font-bold text-white font-mono mt-0.5">${avgTicketUnitPrice}</span>
+                <span className="text-2xl font-bold text-white font-mono mt-0.5">{formatCurrency(Number(avgTicketUnitPrice))}</span>
                 <span className="text-[10px] text-slate-455 mt-0.5">Seat premium adjusted</span>
               </div>
             </div>

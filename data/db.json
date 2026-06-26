@@ -3,14 +3,14 @@
     {
       "id": "user-admin",
       "name": "System Admin",
-      "email": "admin@cinepass.com",
+      "email": "admin@moviebook.com",
       "role": "admin",
       "createdAt": "2026-06-21T16:37:31.953Z"
     },
     {
       "id": "user-customer",
       "name": "John Doe",
-      "email": "user@cinepass.com",
+      "email": "user@moviebook.com",
       "role": "user",
       "createdAt": "2026-06-21T16:37:31.954Z"
     }

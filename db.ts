@@ -105,20 +105,20 @@ const defaultMovies: Movie[] = [
 const defaultTheatres: Theatre[] = [
   {
     id: 'theatre-1',
-    name: 'IMAX Premiere Cinema',
-    location: 'Metropolitan Square, Downtown',
+    name: 'PVR INOX: Nexus Mall',
+    location: 'Nexus Mall, Bengaluru',
     screens: ['Screen 1 (Laser)', 'Screen 2 (Dolby ATMOS)']
   },
   {
     id: 'theatre-2',
-    name: 'Metropolis Multiplex',
-    location: 'Grand Plaza Mall, Uptown',
+    name: 'Cinepolis: Viviana Mall',
+    location: 'Viviana Mall, Mumbai',
     screens: ['Screen A', 'Screen B', 'Screen C']
   },
   {
     id: 'theatre-3',
-    name: 'Starlight Luxury Suite',
-    location: 'Sunset Boulevard, Westside',
+    name: 'Carnival Cinemas: Phoenix Marketcity',
+    location: 'Phoenix Marketcity, Pune',
     screens: ['Starlight Lounge', 'Royal Screen']
   }
 ];
@@ -239,7 +239,7 @@ class JSONDatabase {
     const adminUser: User = {
       id: adminId,
       name: 'System Admin',
-      email: 'admin@cinepass.com',
+      email: 'admin@moviebook.com',
       role: 'admin',
       createdAt: new Date().toISOString()
     };
@@ -247,7 +247,7 @@ class JSONDatabase {
     const regularUser: User = {
       id: userId,
       name: 'John Doe',
-      email: 'user@cinepass.com',
+      email: 'user@moviebook.com',
       role: 'user',
       createdAt: new Date().toISOString()
     };

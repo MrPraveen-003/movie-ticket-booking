@@ -1,6 +1,6 @@
-import React, { createContext, useContext, useState, useCallback } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
-import { CheckCircle2, AlertCircle, Info, X, Flame } from 'lucide-react';
+import React, { createContext, useCallback, useContext, useState } from 'react';
+import { AnimatePresence, motion } from 'motion/react';
+import { AlertCircle, CheckCircle2, Flame, Info, X } from 'lucide-react';
 
 export type ToastType = 'success' | 'error' | 'info' | 'warning';
 
@@ -15,34 +15,30 @@ interface ToastContextType {
   removeToast: (id: string) => void;
 }
 
+const TOAST_LIFETIME_MS = 4500;
 const ToastContext = createContext<ToastContextType | undefined>(undefined);
 
 export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [toasts, setToasts] = useState<ToastItem[]>([]);
 
   const showToast = useCallback((message: string, type: ToastType = 'success') => {
-    const id = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    const id = `${Date.now()}-${Math.random().toString(36).slice(2, 11)}`;
     setToasts((prev) => [...prev, { id, message, type }]);
 
-    // Auto delete after 4s
-    setTimeout(() => {
-      setToasts((prev) => prev.filter((t) => t.id !== id));
-    }, 4500);
+    window.setTimeout(() => {
+      setToasts((prev) => prev.filter((toast) => toast.id !== id));
+    }, TOAST_LIFETIME_MS);
   }, []);
 
   const removeToast = useCallback((id: string) => {
-    setToasts((prev) => prev.filter((t) => t.id !== id));
+    setToasts((prev) => prev.filter((toast) => toast.id !== id));
   }, []);
 
   return (
     <ToastContext.Provider value={{ showToast, removeToast }}>
       {children}
 
-      {/* Floating toast notification stack container */}
-      <div 
-        id="toast-stack-container" 
-        className="fixed bottom-6 right-6 z-50 flex flex-col gap-3 max-w-sm w-full pointer-events-none"
-      >
+      <div id="toast-stack-container" className="pointer-events-none fixed bottom-6 right-6 z-50 flex w-full max-w-sm flex-col gap-3">
         <AnimatePresence>
           {toasts.map((toast) => {
             const isSuccess = toast.type === 'success';
@@ -58,37 +54,34 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
                 exit={{ opacity: 0, scale: 0.85, transition: { duration: 0.2 } }}
                 className="pointer-events-auto w-full"
               >
-                <div 
-                  className={`flex items-start gap-3.5 p-4 rounded-2xl border backdrop-blur-md shadow-2xl transition-all duration-300
-                    ${isSuccess 
-                      ? 'bg-slate-900/95 border-emerald-500/30 text-white shadow-emerald-950/20' 
-                      : isError 
-                        ? 'bg-slate-900/95 border-rose-500/30 text-white shadow-rose-950/20'
-                        : isWarning 
-                          ? 'bg-slate-900/95 border-amber-500/30 text-white shadow-amber-950/20'
-                          : 'bg-slate-900/95 border-indigo-500/30 text-white shadow-indigo-950/20'
-                    }
-                  `}
+                <div
+                  className={`flex items-start gap-3.5 rounded-2xl border p-4 shadow-2xl backdrop-blur-md transition-all duration-300 ${
+                    isSuccess
+                      ? 'border-emerald-500/30 bg-slate-900/95 text-white shadow-emerald-950/20'
+                      : isError
+                        ? 'border-rose-500/30 bg-slate-900/95 text-white shadow-rose-950/20'
+                        : isWarning
+                          ? 'border-amber-500/30 bg-slate-900/95 text-white shadow-amber-950/20'
+                          : 'border-indigo-500/30 bg-slate-900/95 text-white shadow-indigo-950/20'
+                  }`}
                 >
-                  {/* Visual Icons */}
-                  <div className="shrink-0 mt-0.5">
-                    {isSuccess && <CheckCircle2 className="w-5 h-5 text-emerald-400" />}
-                    {isError && <AlertCircle className="w-5 h-5 text-rose-450" />}
-                    {isWarning && <Flame className="w-5 h-5 text-amber-450" />}
-                    {!isSuccess && !isError && !isWarning && <Info className="w-5 h-5 text-indigo-400" />}
+                  <div className="mt-0.5 shrink-0">
+                    {isSuccess && <CheckCircle2 className="h-5 w-5 text-emerald-400" />}
+                    {isError && <AlertCircle className="h-5 w-5 text-rose-450" />}
+                    {isWarning && <Flame className="h-5 w-5 text-amber-450" />}
+                    {!isSuccess && !isError && !isWarning && <Info className="h-5 w-5 text-indigo-400" />}
                   </div>
 
-                  {/* Message body text */}
-                  <div className="flex-1 text-xs leading-relaxed font-sans font-medium text-slate-100">
+                  <div className="flex-1 text-xs font-medium leading-relaxed text-slate-100">
                     {toast.message}
                   </div>
 
-                  {/* Manual Close Trigger button */}
                   <button
+                    type="button"
                     onClick={() => removeToast(toast.id)}
-                    className="shrink-0 text-slate-400 hover:text-white transition-colors p-0.5 rounded-lg hover:bg-slate-800 cursor-pointer"
+                    className="shrink-0 cursor-pointer rounded-lg p-0.5 text-slate-400 transition-colors hover:bg-slate-800 hover:text-white"
                   >
-                    <X className="w-3.5 h-3.5" />
+                    <X className="h-3.5 w-3.5" />
                   </button>
                 </div>
               </motion.div>

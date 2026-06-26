@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'CINEPASS_SUPER_SECRET_KEY_2026_JWT';
+const JWT_SECRET = process.env.JWT_SECRET || 'MOVIEBOOK_SUPER_SECRET_KEY_2026_JWT';
 
 export interface TokenPayload {
   id: string;

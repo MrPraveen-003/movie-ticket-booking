@@ -103,14 +103,14 @@ async function seedDatabaseIfEmpty() {
         {
           _id: new mongoose.Types.ObjectId('653b6d2e67df14081c7af001'),
           name: 'System Admin',
-          email: 'admin@cinepass.com',
+          email: 'admin@moviebook.com',
           password: adminPass,
           role: 'admin'
         },
         {
           _id: new mongoose.Types.ObjectId('653b6d2e67df14081c7af002'),
           name: 'John Doe',
-          email: 'user@cinepass.com',
+          email: 'user@moviebook.com',
           password: userPass,
           role: 'user'
         }

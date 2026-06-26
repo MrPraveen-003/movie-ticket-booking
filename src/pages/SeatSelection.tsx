@@ -3,9 +3,10 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Movie, Show, Theatre } from '../types';
 import { useAuth } from '../context/AuthContext';
-import { Landmark, ArrowLeft, Armchair, HelpCircle, Check, Info } from 'lucide-react';
+import { ArrowLeft, Armchair, Check, Info } from 'lucide-react';
 import { motion } from 'motion/react';
 import { useToast } from '../context/ToastContext';
+import { formatCurrency, formatShowTime } from '../utils/formatters';
 
 export const SeatSelection: React.FC = () => {
   const { showId } = useParams<{ showId: string }>();
@@ -199,7 +200,7 @@ export const SeatSelection: React.FC = () => {
                                 : 'bg-slate-900/90 border-slate-800 text-slate-400 hover:border-slate-500 hover:text-white hover:bg-slate-850'
                             }
                           `}
-                          title={`${seatCode} (${name} - $${price})`}
+                          title={`${seatCode} (${name} - ${formatCurrency(price)})`}
                         >
                           {isSelected ? <Check className="w-3.5 h-3.5" /> : col}
                         </div>
@@ -249,7 +250,7 @@ export const SeatSelection: React.FC = () => {
                 <span className="text-slate-450 text-xs">Showtime Scheduling</span>
                 <div className="text-white text-xs font-mono">
                   <span>{show.date} at </span>
-                  <span className="text-amber-500 font-semibold">{show.time}</span>
+                  <span className="text-amber-500 font-semibold">{formatShowTime(show.time)}</span>
                   <p className="text-[10px] text-slate-500 hover:text-slate-400 mt-1">{theatre.name} - {show.screen}</p>
                 </div>
               </div>
@@ -259,15 +260,15 @@ export const SeatSelection: React.FC = () => {
                 <span className="font-semibold text-slate-300 block mb-1">Row Multipliers</span>
                 <div className="flex justify-between text-slate-400">
                   <span>VIP Lounge (Row E, F)</span>
-                  <span className="font-semibold text-indigo-400">${show.price * 2}</span>
+                  <span className="font-semibold text-indigo-400">{formatCurrency(show.price * 2)}</span>
                 </div>
                 <div className="flex justify-between text-slate-400">
                   <span>Premium (Row A, B)</span>
-                  <span className="font-semibold text-emerald-400">${Math.round(show.price * 1.5)}</span>
+                  <span className="font-semibold text-emerald-400">{formatCurrency(Math.round(show.price * 1.5))}</span>
                 </div>
                 <div className="flex justify-between text-slate-400">
                   <span>Normal (Row C, D)</span>
-                  <span className="font-semibold text-slate-300">${show.price}</span>
+                  <span className="font-semibold text-slate-300">{formatCurrency(show.price)}</span>
                 </div>
               </div>
 
@@ -304,7 +305,7 @@ export const SeatSelection: React.FC = () => {
             <div className="border-t border-slate-800 pt-5 flex flex-col gap-4">
               <div className="flex items-end justify-between">
                 <span className="text-slate-400 text-xs">Total Tickets price</span>
-                <span className="text-3xl font-display font-bold text-amber-500">${calculateTotal()}</span>
+                <span className="text-3xl font-display font-bold text-amber-500">{formatCurrency(calculateTotal())}</span>
               </div>
 
               <motion.button

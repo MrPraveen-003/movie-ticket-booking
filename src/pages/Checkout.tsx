@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { ArrowLeft, CreditCard, ShieldCheck, HelpCircle, Landmark, CheckCircle, Sparkles } from 'lucide-react';
+import { ArrowLeft, CreditCard, ShieldCheck, CheckCircle } from 'lucide-react';
 import { motion } from 'motion/react';
 import { useToast } from '../context/ToastContext';
+import { formatCurrency, formatShowTime } from '../utils/formatters';
 
 export const Checkout: React.FC = () => {
   const location = useLocation();
@@ -110,7 +111,7 @@ export const Checkout: React.FC = () => {
             <div className="flex flex-col gap-2">
               <h1 className="font-display font-bold text-2xl text-white">Tickets Confirmed!</h1>
               <p className="text-xs text-slate-400 max-w-sm mx-auto">
-                Your payment of <span className="text-emerald-400 font-bold">${finalInvoicedAmount}</span> went through successfully.
+                Your payment of <span className="text-emerald-400 font-bold">{formatCurrency(Number(finalInvoicedAmount))}</span> went through successfully.
               </p>
             </div>
 
@@ -125,7 +126,7 @@ export const Checkout: React.FC = () => {
               </div>
               <div className="flex justify-between">
                 <span>Date & Hour:</span>
-                <span className="text-white font-mono">{show.date} at {show.time}</span>
+                <span className="text-white font-mono">{show.date} at {formatShowTime(show.time)}</span>
               </div>
               <div className="flex justify-between">
                 <span>Booked Seats:</span>
@@ -246,7 +247,7 @@ export const Checkout: React.FC = () => {
                     ) : (
                       <>
                         <ShieldCheck className="w-4 h-4 stroke-[2.3]" />
-                        <span>Confirm and Pay ${finalInvoicedAmount}</span>
+                        <span>Confirm and Pay {formatCurrency(Number(finalInvoicedAmount))}</span>
                       </>
                     )}
                   </button>
@@ -256,7 +257,7 @@ export const Checkout: React.FC = () => {
               {/* Secure statement */}
               <div className="flex items-center gap-2.5 px-4 text-slate-500 text-xs">
                 <ShieldCheck className="w-5 h-5 text-emerald-500 shrink-0" />
-                <span>Encrypted 256-bit payment node connection active. CinePass respects payment privacy standard rules.</span>
+                <span>Encrypted 256-bit payment node connection active. Your payment details are handled securely.</span>
               </div>
             </div>
 
@@ -278,7 +279,7 @@ export const Checkout: React.FC = () => {
                   <div className="flex flex-col">
                     <span className="text-white text-xs font-semibold line-clamp-1">{movie.title}</span>
                     <span className="text-[10px] text-slate-450 mt-1">{theatre.name}</span>
-                    <span className="text-[10px] text-slate-505 font-mono mt-0.5">{show.screen} • {show.time}</span>
+                    <span className="text-[10px] text-slate-505 font-mono mt-0.5">{show.screen} • {formatShowTime(show.time)}</span>
                   </div>
                 </div>
 
@@ -286,7 +287,7 @@ export const Checkout: React.FC = () => {
                 <div className="space-y-3.5 text-xs">
                   <div className="flex justify-between items-center text-slate-400">
                     <span>Base Seat Allocations:</span>
-                    <span className="text-white font-mono font-medium">${totalPrice}</span>
+                    <span className="text-white font-mono font-medium">{formatCurrency(totalPrice)}</span>
                   </div>
                   
                   <div className="flex justify-between items-center text-slate-400">
@@ -294,17 +295,17 @@ export const Checkout: React.FC = () => {
                       <span>Booking processing fee</span>
                       <span className="text-[10px] text-slate-500 bg-slate-800 px-1 py-0.5 rounded">(${1.5} x{countTickets})</span>
                     </span>
-                    <span className="text-white font-mono font-medium">${bookingFee}</span>
+                    <span className="text-white font-mono font-medium">{formatCurrency(bookingFee)}</span>
                   </div>
 
                   <div className="flex justify-between items-center text-slate-400">
                     <span>Sales tax & local surcharge (5%):</span>
-                    <span className="text-white font-mono font-medium">${gstTax}</span>
+                    <span className="text-white font-mono font-medium">{formatCurrency(gstTax)}</span>
                   </div>
 
                   <div className="border-t border-slate-805 pt-4 flex justify-between items-end">
                     <span className="text-white font-semibold font-display">Invoiced subtotal:</span>
-                    <span className="text-2xl font-bold font-display text-amber-500 font-mono">${finalInvoicedAmount}</span>
+                    <span className="text-2xl font-bold font-display text-amber-500 font-mono">{formatCurrency(Number(finalInvoicedAmount))}</span>
                   </div>
                 </div>
 

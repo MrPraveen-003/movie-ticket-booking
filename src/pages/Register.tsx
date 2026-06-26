@@ -44,7 +44,7 @@ export const Register: React.FC = () => {
       setLoading(true);
       setError('');
       await register(name, email, password);
-      showToast(`🎉 Registration Successful! Welcome to CinePass, ${name}!`, 'success');
+      showToast(`🎉 Registration successful! Welcome, ${name}!`, 'success');
       navigate('/');
     } catch (err: any) {
       const msg = err.response?.data?.message || 'Registration failed. Try an alternate email address.';
@@ -64,7 +64,7 @@ export const Register: React.FC = () => {
           <div className="text-center flex flex-col items-center gap-2">
             <Link to="/" className="flex items-center gap-1 text-amber-500 font-display font-bold text-2xl tracking-wider mb-2">
               <Film className="w-7 h-7" />
-              <span>CINE<span className="text-white font-light">PASS</span></span>
+              <span>MOVIE<span className="text-white font-light">BOOK</span></span>
             </Link>
             <h2 className="text-xl font-display font-semibold text-white">Create Your Account</h2>
             <p className="text-xs text-slate-450 leading-relaxed max-w-xs">
@@ -166,7 +166,7 @@ export const Register: React.FC = () => {
 
           {/* Footer routing link */}
           <div className="text-xs text-center text-slate-450 border-t border-slate-855 pt-4">
-            <span>Already have a CinePass? </span>
+            <span>Already have an account? </span>
             <Link to="/login" className="text-amber-505 hover:underline font-semibold ml-0.5">Sign in credentials</Link>
           </div>
         </div>

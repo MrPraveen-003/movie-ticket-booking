@@ -30,7 +30,7 @@ export const Login: React.FC = () => {
       setLoading(true);
       setError('');
       await login(email, password);
-      showToast('🌟 Welcome back! You have logged into CinePass successfully.', 'success');
+      showToast('🌟 Welcome back! You have logged in successfully.', 'success');
       navigate(redirect);
     } catch (err: any) {
       const msg = err.response?.data?.message || 'Authentication failed. Please verify credentials.';
@@ -47,7 +47,7 @@ export const Login: React.FC = () => {
       setLoading(true);
       setError('');
       await login(usrEmail, pass);
-      showToast(`⚡ Quick Login Successful: Connected as ${usrEmail === 'admin@cinepass.com' ? 'Administrator' : 'Customer'}!`, 'success');
+      showToast(`⚡ Quick login successful: Connected as ${usrEmail === 'admin@moviebook.com' ? 'Administrator' : 'Customer'}!`, 'success');
       navigate(redirect);
     } catch (err: any) {
       setError('Quick login failed, please register or retype.');
@@ -66,7 +66,7 @@ export const Login: React.FC = () => {
           <div className="text-center flex flex-col items-center gap-2">
             <Link to="/" className="flex items-center gap-1 text-amber-500 font-display font-bold text-2xl tracking-wider mb-2">
               <Film className="w-7 h-7" />
-              <span>CINE<span className="text-white font-light">PASS</span></span>
+              <span>MOVIE<span className="text-white font-light">BOOK</span></span>
             </Link>
             <h2 className="text-xl font-display font-semibold text-white">Sign In to Your Account</h2>
             <p className="text-xs text-slate-450 leading-relaxed max-w-sm">
@@ -140,7 +140,7 @@ export const Login: React.FC = () => {
             </span>
             <div className="grid grid-cols-2 gap-2 text-center text-xs">
               <button
-                onClick={() => handleQuickLogin('user@cinepass.com', 'user123')}
+                onClick={() => handleQuickLogin('user@moviebook.com', 'user123')}
                 disabled={loading}
                 className="p-2 py-2.5 rounded-lg border border-slate-800 bg-slate-900 text-slate-300 font-semibold hover:border-amber-505/30 transition-all cursor-pointer"
                 id="quick-user-login-btn"
@@ -148,7 +148,7 @@ export const Login: React.FC = () => {
                 Standard Customer <span className="text-amber-500 text-[10px] block mt-0.5">user123</span>
               </button>
               <button
-                onClick={() => handleQuickLogin('admin@cinepass.com', 'admin123')}
+                onClick={() => handleQuickLogin('admin@moviebook.com', 'admin123')}
                 disabled={loading}
                 className="p-2 py-2.5 rounded-lg border border-indigo-900 bg-slate-900 text-slate-300 font-semibold hover:border-indigo-505/30 transition-all cursor-pointer"
                 id="quick-admin-login-btn"
@@ -160,7 +160,7 @@ export const Login: React.FC = () => {
 
           {/* Footer routing link */}
           <div className="text-xs text-center text-slate-450 border-t border-slate-855 pt-4">
-            <span>New to CinePass? </span>
+            <span>New here? </span>
             <Link to="/register" className="text-amber-500 hover:underline font-semibold ml-0.5">Sign up today</Link>
           </div>
         </div>

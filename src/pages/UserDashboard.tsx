@@ -6,6 +6,7 @@ import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
 import { Ticket, Calendar, Clock, MapPin, ScanQrCode, Sparkles, LogIn, ArrowRight, User as UserIcon } from 'lucide-react';
 import { motion } from 'motion/react';
+import { formatCurrency, formatShowTime } from '../utils/formatters';
 
 export const UserDashboard: React.FC = () => {
   const { user } = useAuth();
@@ -53,7 +54,7 @@ export const UserDashboard: React.FC = () => {
         </div>
         <h2 className="font-display font-semibold text-lg text-white">Sign In to See Your Tickets</h2>
         <p className="text-xs text-slate-450 mt-1.5 leading-relaxed">
-          Access your cinematic passes, dynamic receipt logs, and scanned entry barcodes by checking into your CinePass account profile.
+          Access your bookings, receipts, and entry details from your personal account profile.
         </p>
         <button
           onClick={() => navigate('/login')}
@@ -182,7 +183,7 @@ export const UserDashboard: React.FC = () => {
                           <span className="text-white font-mono font-medium">{booking.showDetails.date}</span>
                           <span className="text-[10.5px] text-slate-500 mt-1 flex items-center gap-1">
                             <Clock className="w-3.5 h-3.5 text-amber-505" />
-                            <span>{booking.showDetails.time} Showtime</span>
+                            <span>{formatShowTime(booking.showDetails.time)} Showtime</span>
                           </span>
                         </div>
                       </div>
@@ -205,7 +206,7 @@ export const UserDashboard: React.FC = () => {
                     <div className="flex items-center gap-4 w-full sm:w-auto justify-between sm:justify-end">
                       <div className="flex flex-col sm:items-end">
                         <span className="text-slate-500 text-[10px] uppercase">Paid amount</span>
-                        <span className="text-md sm:text-lg font-bold text-white font-mono">${booking.totalPrice}</span>
+                        <span className="text-md sm:text-lg font-bold text-white font-mono">{formatCurrency(booking.totalPrice)}</span>
                       </div>
 
                       <button

@@ -1,6 +1,6 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useContext, useEffect, useState, type PropsWithChildren } from 'react';
 import axios from 'axios';
-import { User } from '../types';
+import type { User } from '../types';
 
 interface AuthContextType {
   user: User | null;
@@ -12,20 +12,20 @@ interface AuthContextType {
   refreshUser: () => Promise<void>;
 }
 
+const AUTH_TOKEN_KEY = 'moviebook_token';
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const AuthProvider = ({ children }: PropsWithChildren) => {
   const [user, setUser] = useState<User | null>(null);
-  const [token, setToken] = useState<string | null>(localStorage.getItem('cinepass_token'));
+  const [token, setToken] = useState<string | null>(localStorage.getItem(AUTH_TOKEN_KEY));
   const [loading, setLoading] = useState(true);
 
-  // Set default bearer header on axios whenever token changes
   useEffect(() => {
     if (token) {
-      localStorage.setItem('cinepass_token', token);
+      localStorage.setItem(AUTH_TOKEN_KEY, token);
       axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
     } else {
-      localStorage.removeItem('cinepass_token');
+      localStorage.removeItem(AUTH_TOKEN_KEY);
       delete axios.defaults.headers.common['Authorization'];
     }
   }, [token]);
@@ -36,11 +36,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setLoading(false);
       return;
     }
+
     try {
       const response = await axios.get('/api/auth/me');
       setUser(response.data.user);
-    } catch (err) {
-      console.error('Session verification expired or invalid', err);
+    } catch (error) {
+      console.error('Session verification expired or invalid', error);
       setToken(null);
       setUser(null);
     } finally {
@@ -49,25 +50,25 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   useEffect(() => {
-    refreshUser();
+    void refreshUser();
   }, [token]);
 
-  const login = async (email: string, pass: string) => {
-    const res = await axios.post('/api/auth/login', { email, password: pass });
-    setToken(res.data.token);
-    setUser(res.data.user);
+  const login = async (email: string, password: string) => {
+    const response = await axios.post('/api/auth/login', { email, password });
+    setToken(response.data.token);
+    setUser(response.data.user);
   };
 
-  const register = async (name: string, email: string, pass: string) => {
-    const res = await axios.post('/api/auth/register', { name, email, password: pass });
-    setToken(res.data.token);
-    setUser(res.data.user);
+  const register = async (name: string, email: string, password: string) => {
+    const response = await axios.post('/api/auth/register', { name, email, password });
+    setToken(response.data.token);
+    setUser(response.data.user);
   };
 
   const logout = () => {
     setToken(null);
     setUser(null);
-    localStorage.removeItem('cinepass_token');
+    localStorage.removeItem(AUTH_TOKEN_KEY);
   };
 
   return (
@@ -84,4 +85,5 @@ export const useAuth = () => {
   }
   return context;
 };
+
 export default AuthContext;
