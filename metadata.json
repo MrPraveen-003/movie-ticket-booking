@@ -1,0 +1,6 @@
+{
+  "name": "Movie Ticket Booking",
+  "description": "A premium, production-ready, full-stack movie ticket booking application with real-time seat mapping, responsive theatre layouts, QR code generation, order history, and role-based portals.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
